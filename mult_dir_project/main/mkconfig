@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "#ifndef A_HELLO_H " > hello.h
+echo "#define A_HELLO_H " >> hello.h
+echo "#define HELLO 0 " >> hello.h
+echo "#endif " >> hello.h

@@ -1,0 +1,1 @@
+Debug或Release目录由config.mk中DEBUG宏控制，应该可以在make命令传入参数来指定
