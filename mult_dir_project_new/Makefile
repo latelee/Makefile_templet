@@ -68,9 +68,9 @@ LDFLAGS += -lpthread -lrt
 # source file(s), including c file(s) cpp file(s)
 # you can also use $(wildcard *.c), etc.
 SRC_DIR = .
-SRC_DIR1 = 
-SRC_DIR2 = 
-SRC_DIR3 = 
+SRC_DIR1 = foo
+SRC_DIR2 = bar
+SRC_DIR3 = crc
 
 # ok for c/c++
 SRC = $(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
@@ -80,6 +80,10 @@ SRC+=$(wildcard $(SRC_DIR3)/*.c $(SRC_DIR3)/*.cpp)
 
 # ok for c/c++
 OBJ = $(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(SRC))) 
+
+# object file(s)
+#OBJ_C   := $(patsubst %.c,%.o,$(SRC_C))
+#OBJ_CPP := $(patsubst %.cpp,%.o,$(SRC_CPP))
 
 # !!!===
 # target executable file or .a or .so

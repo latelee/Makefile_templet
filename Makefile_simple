@@ -10,6 +10,7 @@
 #
 # usage: $ make
 #        $ make debug=y
+#        $ make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
 #
 # log
 #       2013-05-14 sth about debug...
@@ -31,7 +32,7 @@ CFLAGS := -Wall
 
 #****************************************************************************
 # debug can be set to y to include debugging info, or n otherwise
-debug := y
+debug          := y
 
 #****************************************************************************
 
@@ -52,7 +53,10 @@ LIBS :=
 LDFLAGS := $(LIBS)
 
 # !!!===
-INCDIRS := -I./
+INC1 = ./
+INC2 = ./inc
+INC3 = 
+INCDIRS := -I$(INC1) -I$(INC2)
 
 # !!!===
 CFLAGS += $(INCDIRS)
@@ -61,24 +65,27 @@ CFLAGS += $(INCDIRS)
 LDFLAGS += -lpthread -lrt
 
 # !!!===
-# source file(s), including c file(s) cpp file(s)
+# source file(s), including c file(s) or cpp file(s)
 # you can also use $(wildcard *.c), etc.
 SRC_DIR = .
-# SRC_FOO = foo
+SRC_DIR1 = 
+SRC_DIR2 = 
+SRC_DIR3 = 
 
 # ok for c/c++
 SRC = $(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
-
-# SRC+=$(wildcard $(SRC_FOO)/*.c $(SRC_FOO)/*.cpp)
+SRC+=$(wildcard $(SRC_DIR1)/*.c $(SRC_DIR1)/*.cpp)
+SRC+=$(wildcard $(SRC_DIR2)/*.c $(SRC_DIR2)/*.cpp)
+SRC+=$(wildcard $(SRC_DIR3)/*.c $(SRC_DIR3)/*.cpp)
 
 # ok for c/c++
 OBJ = $(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(SRC))) 
-
 
 # !!!===
 # target executable file or .a or .so
 target = a.out
 
+# !!!===
 # in case all .c/.cpp need g++...
 # CC = $(CXX)
 ###############################################################################
@@ -93,16 +100,17 @@ $(target): $(OBJ)
 # make all .c or .cpp
 %.o: %.c
 	@echo "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.cpp
 	@echo "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) -c $< -o $@
 
 clean:
 	@echo "Cleaning..."
 	@$(RM) $(target)
-    # use 'grep -v xxx.o' to skip the file you need
+
+	# use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f
 
 .PHONY: all clean
