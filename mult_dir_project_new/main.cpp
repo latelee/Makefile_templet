@@ -3,6 +3,7 @@
 #include <foo.h>
 #include <bar.h>
 #include <crc.h>
+#include "hello.h"
 #include "debug.h"
 
 static void nogood(void)
@@ -13,6 +14,9 @@ static void nogood(void)
 int main(void)
 {
     printf("hello from %s().\n", __func__);
+    
+    hello();
+
     hello_foo();
     hello_bar();
     nogood();

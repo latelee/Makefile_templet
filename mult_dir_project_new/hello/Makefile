@@ -32,7 +32,7 @@ MAKE   = make
 
 # !!!===
 # target executable file or .a or .so
-target = a.out
+target = libhello.a
 
 # !!!===
 # compile flags
@@ -40,7 +40,7 @@ CFLAGS := -Wall -Wfatal-errors
 
 #****************************************************************************
 # debug can be set to y to include debugging info, or n otherwise
-debug  := y
+debug  := 
 
 #****************************************************************************
 
@@ -55,13 +55,13 @@ DEFS    = -DFUCK
 
 CFLAGS  += $(DEFS)
 
-LIBS    := ./hello/libhello.a
+LIBS    := 
 
 LDFLAGS := $(LIBS)
 
 # !!!===
 INC1 = ./
-INC2 = ./inc
+INC2 = ../inc
 INC3 = 
 INCDIRS := -I$(INC1) -I$(INC2)
 
@@ -77,9 +77,9 @@ DYNC_FLAGS += -fpic -shared
 # source file(s), including c file(s) or cpp file(s)
 # you can also use $(wildcard *.c), etc.
 SRC_DIR = .
-SRC_DIR1 = foo
-SRC_DIR2 = bar
-SRC_DIR3 = crc
+SRC_DIR1 = 
+SRC_DIR2 = 
+SRC_DIR3 = 
 
 # ok for c/c++
 SRC = $(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
@@ -98,7 +98,7 @@ OBJ = $(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(SRC)))
 
 all: $(target)
 
-$(target): $(LIBS) $(OBJ)
+$(target): $(OBJ)
 
 ifeq ($(suffix $(target)), .so)
 	@echo "Generating dynamic lib file..." $(notdir $(target))
@@ -120,13 +120,9 @@ endif
 	@echo "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
 	@$(CXX) $(CFLAGS) -c $< -o $@
 
-$(LIBS):
-	echo $(dir $@)
-	$(MAKE) -C $(dir $@)
-
 clean:
 	@echo "Cleaning..."
-	@$(RM) $(target) $(LIBS)
+	@$(RM) $(target)
 
 # use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f

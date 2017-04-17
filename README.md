@@ -12,9 +12,10 @@ Makefile_templet -- Linux环境的Makefile模板
 用法
 =======================
 * 根据工程实际情况，修改头文件引用目录、源码目录、编译选项(如添加动态/静态库)，以及生成文件名。
-* 要修改的地方已经使用 !!!=== 做标示
+* 要修改的地方已经使用 !!!=== 做标示，另外，如果要删除生成的.a或.so，需要在clean下修改(本模板不做.a的匹配)。
 * 可直接运行make
 * 调试版本：make debug=y
+* 非调试版本：make debug=n
 * 多目录版本：make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
 * 交叉编译版本：make CROSS_COMPILE=arm-linux-
 
@@ -26,5 +27,5 @@ Makefile_templet -- Linux环境的Makefile模板
 作者
 =======================
 思堂工作室 李迟(Late Lee) <br>
-2016.5.5 <br>
+2017.4.17 <br>
 [迟思堂工作室](http://www.latelee.org)

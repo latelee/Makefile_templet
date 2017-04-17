@@ -1,5 +1,5 @@
 #
-# (C) Copyleft 2011 2012 2013 2014 2015 2016
+# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017
 # Late Lee from http://www.latelee.org
 # 
 # A simple Makefile for *ONE* project(c or/and cpp file) in *ONE* or *MORE* directory
@@ -16,6 +16,7 @@
 # log
 #       2013-05-14 sth about debug...
 #       2016-02-29 sth for c/c++ multi diretory
+#       2017-04-17 -s for .a/.so if no debug
 ###############################################################################
 
 # !!!=== cross compile...
@@ -44,15 +45,9 @@ debug  := y
 #****************************************************************************
 
 ifeq ($(debug), y)
-CFLAGS += -ggdb -rdynamic
+    CFLAGS += -ggdb -rdynamic
 else
-    # if target is lib(.a/.so), don't need "-O2 -s"
-    # == if (target != .a && target != .so)
-    ifneq ($(suffix $(target)), .a)
-    ifneq ($(suffix $(target)), .so)
     CFLAGS += -O2 -s
-    endif
-    endif
 endif
 
 # !!!===
