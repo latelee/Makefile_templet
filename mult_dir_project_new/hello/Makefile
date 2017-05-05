@@ -94,6 +94,15 @@ OBJ = $(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(SRC)))
 # !!!===
 # in case all .c/.cpp need g++...
 # CC = $(CXX)
+
+ifeq ($(V),1)
+Q=
+NQ=true
+else
+Q=@
+NQ=echo
+endif
+
 ###############################################################################
 
 all: $(target)
@@ -101,28 +110,28 @@ all: $(target)
 $(target): $(OBJ)
 
 ifeq ($(suffix $(target)), .so)
-	@echo "Generating dynamic lib file..." $(notdir $(target))
-	@$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
+	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
+	$(Q)$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
 else ifeq ($(suffix $(target)), .a)
-	@echo "Generating static lib file..." $(notdir $(target))
-	@$(AR) $(ARFLAGS) -o $(target) $^
+	@$(NQ) "Generating static lib file..." $(notdir $(target))
+	$(Q)$(AR) $(ARFLAGS) -o $(target) $^
 else
-	@echo "Generating executable file..." $(notdir $(target))
-	@$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS)
+	@$(NQ) "Generating executable file..." $(notdir $(target))
+	$(Q)$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS)
 endif
 
 # make all .c or .cpp
 %.o: %.c
-	@echo "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(NQ) "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.cpp
-	@echo "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
+	$(Q)$(CXX) $(CFLAGS) -c $< -o $@
 
 clean:
-	@echo "Cleaning..."
-	@$(RM) $(target)
+	@$(NQ) "Cleaning..."
+	$(Q)$(RM) $(target)
 
 # use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f
