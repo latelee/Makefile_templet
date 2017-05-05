@@ -1,4 +1,3 @@
-#
 # (C) Copyleft 2011 2012 2013 2014 2015 2016 2017
 # Late Lee from http://www.latelee.org
 # 
@@ -8,15 +7,18 @@
 # you can put head file(s) in 'include' directory, so it looks 
 # a little neat.
 #
-# usage: $ make
-#        $ make CROSS_COMPILE=arm-arago-linux-gnueabi-
-#        $ make debug=y
+# usage: 
+#        $ make
+#        $ make V=1     # verbose ouput
+#        $ make CROSS_COMPILE=arm-arago-linux-gnueabi-  # cross compile for ARM, etc.
+#        $ make debug=y # debug
 #        $ make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
 #
 # log
 #       2013-05-14 sth about debug...
 #       2016-02-29 sth for c/c++ multi diretory
 #       2017-04-17 -s for .a/.so if no debug
+#       2017-05-05 Add V for verbose ouput
 ###############################################################################
 
 # !!!=== cross compile...
