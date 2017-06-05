@@ -22,7 +22,7 @@
 ###############################################################################
 
 # !!!=== cross compile...
-CROSS_COMPILE = 
+CROSS_COMPILE ?= 
 
 CC  = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
@@ -32,17 +32,22 @@ ARFLAGS = -cr
 RM     = -rm -rf
 MAKE   = make
 
+CFLAGS  = 
+LDFLAGS = 
+DEFS    =
+LIBS    =
+ 
 # !!!===
 # target executable file or .a or .so
 target = a.out
 
 # !!!===
 # compile flags
-CFLAGS := -Wall -Wfatal-errors
+CFLAGS += -Wall -Wfatal-errors
 
 #****************************************************************************
 # debug can be set to y to include debugging info, or n otherwise
-debug  := y
+debug  = y
 
 #****************************************************************************
 
@@ -53,13 +58,13 @@ else
 endif
 
 # !!!===
-DEFS    = -DFUCK
+DEFS    += -DFUCK
 
 CFLAGS  += $(DEFS)
 
-LIBS    := 
+LIBS    += 
 
-LDFLAGS := $(LIBS)
+LDFLAGS += $(LIBS)
 
 # !!!===
 INC1 = ./
