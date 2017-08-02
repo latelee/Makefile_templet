@@ -8,6 +8,7 @@ Makefile_templet -- Linux环境的Makefile模板
 * one_dir_project：单目录工程示例
 * mult_dir_project：多目录工程示例(参考uboot的)
 * mult_dir_project_new：由单目录工程的Makefile改造而成，区别于uboot版本
+* linux_driver：linux驱动的Makefile模板及其测试示例。
 
 用法
 =======================
@@ -21,16 +22,19 @@ Makefile_templet -- Linux环境的Makefile模板
 * 交叉编译版本：make CROSS_COMPILE=arm-linux-
 * 多目录版本：make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
 
+注意事项
+=======================
+内核Makefile需要手动指定编译所需的文件(.o形式)，使用通配符匹配无法编译。
+
 声明
 =======================
-本程序仅限于学习交流。<br>
-欢迎使用，任何问题可反馈给作者。
+本目录所有文件均可用于任何目的、场合，欢迎大家使用！任何问题可反馈给作者。
 
 作者
 =======================
-思堂工作室 李迟(Late Lee) <br>
+思堂工作室 李迟(Late Lee at latelee@163.com) <br>
 
-[迟思堂工作室](http://www.latelee.org)
+[迟思堂工作室](http://www.latelee.org) 欢迎赞助作者！
 
 last update: <br>
-2017.5.5 <br>
+2017.8.2 <br>
