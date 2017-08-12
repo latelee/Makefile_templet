@@ -36,7 +36,7 @@ CFLAGS  =
 LDFLAGS = 
 DEFS    =
 LIBS    =
- 
+
 # !!!===
 # target executable file or .a or .so
 target = a.out
@@ -58,9 +58,10 @@ else
 endif
 
 # !!!===
-DEFS    += -DFUCK
+DEFS    += -DJIMKENT
 
 CFLAGS  += $(DEFS)
+CXXFLAGS = $(CFLAGS)
 
 LIBS    += 
 
@@ -74,6 +75,7 @@ INCDIRS := -I$(INC1) -I$(INC2)
 
 # !!!===
 CFLAGS += $(INCDIRS)
+CXXFLAGS += 
 
 # !!!===
 LDFLAGS += -lpthread -lrt
@@ -106,7 +108,7 @@ ifeq ($(V),1)
 Q=
 NQ=true
 else
-Q=
+Q=@
 NQ=echo
 endif
 
@@ -118,13 +120,13 @@ $(target): $(OBJ)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
-	$(Q)$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
+	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
 else ifeq ($(suffix $(target)), .a)
 	@$(NQ) "Generating static lib file..." $(notdir $(target))
 	$(Q)$(AR) $(ARFLAGS) -o $(target) $^
 else
 	@$(NQ) "Generating executable file..." $(notdir $(target))
-	$(Q)$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS)
+	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS)
 endif
 
 # make all .c or .cpp
@@ -134,7 +136,7 @@ endif
 
 %.o: %.cpp
 	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
-	$(Q)$(CXX) $(CFLAGS) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	@$(NQ) "Cleaning..."

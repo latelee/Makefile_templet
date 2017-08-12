@@ -58,9 +58,10 @@ else
 endif
 
 # !!!===
-DEFS    += -DFUCK
+DEFS    += -DJIMKENT
 
 CFLAGS  += $(DEFS)
+CXXFLAGS = $(CFLAGS)
 
 LIBS    += ./hello/libhello.a
 
@@ -74,6 +75,7 @@ INCDIRS := -I$(INC1) -I$(INC2)
 
 # !!!===
 CFLAGS += $(INCDIRS)
+CXXFLAGS += 
 
 # !!!===
 LDFLAGS += -lpthread -lrt
@@ -114,17 +116,17 @@ endif
 
 all: $(target)
 
-$(target): $(LIBS) $(OBJ)
+$(target): $(OBJ)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
-	$(Q)$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
+	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
 else ifeq ($(suffix $(target)), .a)
 	@$(NQ) "Generating static lib file..." $(notdir $(target))
 	$(Q)$(AR) $(ARFLAGS) -o $(target) $^
 else
 	@$(NQ) "Generating executable file..." $(notdir $(target))
-	$(Q)$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS)
+	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS)
 endif
 
 # make all .c or .cpp
@@ -134,7 +136,7 @@ endif
 
 %.o: %.cpp
 	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
-	$(Q)$(CXX) $(CFLAGS) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	@$(NQ) "Cleaning..."
@@ -144,4 +146,3 @@ clean:
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f
 
 .PHONY: all clean
-
