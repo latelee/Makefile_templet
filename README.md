@@ -32,7 +32,7 @@ Makefile_templet -- Linux环境的Makefile模板
 
 作者
 =======================
-思堂工作室 李迟(Late Lee at latelee@163.com) <br>
+思堂工作室 李迟(Late Lee at latelee@latelee.com) <br>
 
 [迟思堂工作室](http://www.latelee.org) 欢迎赞助作者！
 

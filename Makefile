@@ -1,5 +1,5 @@
 # (C) Copyleft 2011 2012 2013 2014 2015 2016 2017
-# Late Lee from http://www.latelee.org
+# Late Lee(latelee@latelee.com) from http://www.latelee.org
 # 
 # A simple Makefile for *ONE* project(c or/and cpp file) in *ONE* or *MORE* directory
 #

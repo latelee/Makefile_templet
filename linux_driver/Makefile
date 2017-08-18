@@ -1,6 +1,6 @@
 #################################################################
 # (C) Copyleft 2010 2011 2013 2015 2016 2017
-# by Late Lee<latelee@163.com> at www.latelee.org
+# by Late Lee<(latelee@latelee.com)> at www.latelee.org
 # 
 # A simple Makefile for linux driver
 #
