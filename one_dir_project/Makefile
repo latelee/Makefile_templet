@@ -1,5 +1,5 @@
-# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017
-# Late Lee from http://www.latelee.org
+# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017 2018
+# Late Lee(li@latelee.org) from http://www.latelee.org
 # 
 # A simple Makefile for *ONE* project(c or/and cpp file) in *ONE* or *MORE* directory
 #
@@ -36,7 +36,7 @@ CFLAGS  =
 LDFLAGS = 
 DEFS    =
 LIBS    =
- 
+
 # !!!===
 # target executable file or .a or .so
 target = a.out
@@ -44,6 +44,10 @@ target = a.out
 # !!!===
 # compile flags
 CFLAGS += -Wall -Wfatal-errors
+
+# !!!=== pkg-config here
+#CFLAGS += $(shell pkg-config --cflags --libs glib-2.0 gattlib)
+#LDFLAGS += $(shell pkg-config --cflags --libs glib-2.0 gattlib)
 
 #****************************************************************************
 # debug can be set to y to include debugging info, or n otherwise
