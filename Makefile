@@ -43,7 +43,7 @@ target = a.out
 
 # !!!===
 # compile flags
-CFLAGS += -Wall -Wfatal-errors
+CFLAGS += -Wall -Wfatal-errors -MMD
 
 # !!!=== pkg-config here
 #CFLAGS += $(shell pkg-config --cflags --libs glib-2.0 gattlib)
@@ -72,14 +72,17 @@ LIBS    +=
 LDFLAGS += $(LIBS)
 
 # !!!===
-INC1 = ./
-INC2 = ./inc
-INC3 = 
-INCDIRS := -I$(INC1) -I$(INC2)
+INC = ./ ./inc ../outbox
+# or 
+#INC = ./
+#INC += ./inc
+#INC += ../outbox
+
+INCDIRS := $(addprefix -I, $(INC))
 
 # !!!===
 CFLAGS += $(INCDIRS)
-CXXFLAGS += 
+CXXFLAGS += -std=c++11
 
 # !!!===
 LDFLAGS += -lpthread -lrt
@@ -87,22 +90,21 @@ LDFLAGS += -lpthread -lrt
 DYNC_FLAGS += -fpic -shared
 
 # !!!===
-# source file(s), including c file(s) or cpp file(s)
-# you can also use $(wildcard *.c), etc.
-SRC_DIR = .
-SRC_DIR1 = 
-SRC_DIR2 = 
-SRC_DIR3 = 
+# source file(s), including ALL c file(s) or cpp file(s)
+# just need the directory.
+SRC_DIRS = ./ ../outbox
+# or
+#SRC_DIRS = ./ 
+#SRC_DIRS += ../outbox
 
-# ok for c/c++
-SRC = $(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
-SRC+=$(wildcard $(SRC_DIR1)/*.c $(SRC_DIR1)/*.cpp)
-SRC+=$(wildcard $(SRC_DIR2)/*.c $(SRC_DIR2)/*.cpp)
-SRC+=$(wildcard $(SRC_DIR3)/*.c $(SRC_DIR3)/*.cpp)
+SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c')
 
-# ok for c/c++
-OBJ = $(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(SRC))) 
+# or try this
+# SRCS := $(shell find $(SRC_DIRS) -maxdepth 1 -name '*.cpp' -or -name '*.c')
 
+OBJS := $(addsuffix .o,$(basename $(SRCS)))
+
+DEPS := $(OBJS:.o=.d)
 
 # !!!===
 # in case all .c/.cpp need g++...
@@ -120,7 +122,7 @@ endif
 
 all: $(target)
 
-$(target): $(OBJ)
+$(target): $(OBJS)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
@@ -144,9 +146,11 @@ endif
 
 clean:
 	@$(NQ) "Cleaning..."
-	$(Q)$(RM) $(target)
+	$(Q)$(RM) $(OBJS) $(target) $(DEPS)
 
 # use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f
 
 .PHONY: all clean
+
+-include $(DEPS)
