@@ -144,7 +144,7 @@ endif
 
 clean:
 	@$(NQ) "Cleaning..."
-	$(Q)$(RM) $(target)
+	$(Q)$(RM) $(target) $(OBJ)
 
 # use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f
