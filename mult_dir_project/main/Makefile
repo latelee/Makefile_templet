@@ -10,10 +10,10 @@
 # $ make O =../build
 # BUILD_DIR = ../build
 # NOTE!!! do not add "/" at the end!
-BUILD_DIR := ../../build
+BUILD_DIR := ../build
 
 # binary file director
-BIN_DIR := ../../bin
+BIN_DIR := ../bin
 
 OBJTREE		:= $(if $(BUILD_DIR),$(BUILD_DIR),$(CURDIR))
 SRCTREE		:= $(CURDIR)
@@ -80,6 +80,9 @@ exe: $(OBJ_CPP) $(OBJ_C)
 
 $(LIBS):
 	$(MAKE) -C $(dir $(subst $(obj),,$@))
+
+depend:
+	$(MAKE) -C ../bar/ _depend
 
 clean:
 	@echo "cleaning..."

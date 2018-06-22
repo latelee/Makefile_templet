@@ -20,12 +20,31 @@
 #       2017-05-05 Add V for verbose ouput
 ###############################################################################
 
+# !!!=== version information
+VER_MAJOR ?= 0
+VER_MINOR ?= 1
+# !!!=== version head file
+VER_FILE ?= inc/version.h
+
+# !!!=== release or not (R=1 means release)
+R ?= 0
+
+# !!!===
+# version script
+VER_SCRIPT ?= ./generate_version.sh
+
 # !!!=== cross compile...
 CROSS_COMPILE ?= 
+
+MKDIR_P ?= mkdir -p
 
 CC  = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
 AR  = $(CROSS_COMPILE)ar
+
+# !!!===
+# in case all .c/.cpp need g++...
+# CC = $(CXX)
 
 ARFLAGS = -cr
 RM     = -rm -rf
@@ -61,6 +80,7 @@ else
 endif
 
 # !!!===
+# Macros define here
 DEFS    += -DJIMKENT
 
 CFLAGS  += $(DEFS)
@@ -71,43 +91,42 @@ LIBS    +=
 LDFLAGS += $(LIBS)
 
 # !!!===
-INC = ./ ./inc ../outbox
-# or 
-#INC = ./
-#INC += ./inc
-#INC += ../outbox
-
-INCDIRS := $(addprefix -I, $(INC))
+# include head file directory here
+INC = ./include ./inc
+# or try this
+#INC := $(shell find $(INC) -type d)
 
 # !!!===
-CFLAGS += $(INCDIRS)
-CXXFLAGS += -std=c++11
-
-# !!!===
-LDFLAGS += -lpthread -lrt
-
-DYNC_FLAGS += -fpic -shared
+# build directory
+BUILD_DIR ?= #./build/
 
 # !!!===
 # source file(s), including ALL c file(s) or cpp file(s)
 # just need the directory.
-SRC_DIRS = ./ ../outbox
-# or
+SRC_DIRS = . foo bar crc hello
+# or try this
 #SRC_DIRS = ./ 
 #SRC_DIRS += ../outbox
 
-SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c')
-
-# or try this
-# SRCS := $(shell find $(SRC_DIRS) -maxdepth 1 -name '*.cpp' -or -name '*.c')
-
-OBJS := $(addsuffix .o,$(basename $(SRCS)))
-
-DEPS := $(OBJS:.o=.d)
+# !!!===
+# gcc/g++ compile flags
+CFLAGS += $(INCDIRS)
+CXXFLAGS += -std=c++11
 
 # !!!===
-# in case all .c/.cpp need g++...
-# CC = $(CXX)
+# gcc/g++ link flags
+LDFLAGS += -lpthread -lrt
+
+DYNC_FLAGS += -fpic -shared
+
+INCDIRS := $(addprefix -I, $(INC))
+
+SRCS := $(shell find $(SRC_DIRS) -maxdepth 1 -name '*.cpp' -or -name '*.c')
+#SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c')
+
+OBJS = $(patsubst %.c,$(BUILD_DIR)%.o, $(patsubst %.cpp,$(BUILD_DIR)%.o, $(SRCS))) 
+
+DEPS := $(OBJS:.o=.d)
 
 ifeq ($(V),1)
 Q=
@@ -119,9 +138,13 @@ endif
 
 ###############################################################################
 
-all: $(target)
+all: $(VER_FILE) $(BUILD_DIR)$(target)
 
-$(target): $(OBJS)
+$(VER_FILE): 
+	@echo "building version..."
+	@chmod +x $(VER_SCRIPT); sh $(VER_SCRIPT) $(VER_FILE) $(VER_MAJOR) $(VER_MINOR) $(R)
+
+$(BUILD_DIR)$(target): $(OBJS)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
@@ -135,18 +158,23 @@ else
 endif
 
 # make all .c or .cpp
-%.o: %.c
-	@$(NQ) "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
+$(BUILD_DIR)%.o: %.c
+	@$(MKDIR_P) $(dir $@)
+	@$(NQ) "Compiling: " $(basename $(notdir $@))
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
-%.o: %.cpp
-	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
+$(BUILD_DIR)%.o: %.cpp
+	@$(MKDIR_P) $(dir $@)
+	@$(NQ) "Compiling: " $(basename $(notdir $@))
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	@$(NQ) "Cleaning..."
 	$(Q)$(RM) $(OBJS) $(target) $(DEPS)
-
+# delete build directory if needed
+ifneq ($(BUILD_DIR),)
+	$(Q)$(RM) $(BUILD_DIR)
+endif
 # use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f
 

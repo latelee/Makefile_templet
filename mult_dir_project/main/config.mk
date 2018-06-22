@@ -17,7 +17,7 @@ ARFLAGS = cr
 RM = -rm -rf
 MAKE = make
 
-CFLAGS = #-Wall
+CFLAGS = -Wall -Wfatal-errors -MM
 DEBUG = y
 
 ifeq ($(DEBUG), y)

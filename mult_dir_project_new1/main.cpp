@@ -6,6 +6,8 @@
 #include "hello.h"
 #include "debug.h"
 
+#include "version.h"
+
 static void nogood(void)
 {
     printf("no good %s.\n", "nogood");
@@ -13,7 +15,7 @@ static void nogood(void)
 
 int main(void)
 {
-    printf("hello from %s().\n", __func__);
+    printf("hello from %s() %s.\n", __func__, VERSION_STRING);
     
     hello();
 

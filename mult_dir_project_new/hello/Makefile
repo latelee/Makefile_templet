@@ -72,10 +72,9 @@ LIBS    +=
 LDFLAGS += $(LIBS)
 
 # !!!===
-INC1 = ./
-INC2 = ../inc
-INC3 = 
-INCDIRS := -I$(INC1) -I$(INC2)
+INC = ./ ../inc
+
+INCDIRS := $(addprefix -I, $(INC))
 
 # !!!===
 CFLAGS += $(INCDIRS)
@@ -88,20 +87,11 @@ DYNC_FLAGS += -fpic -shared
 
 # !!!===
 # source file(s), including c file(s) or cpp file(s)
-# you can also use $(wildcard *.c), etc.
-SRC_DIR = .
-SRC_DIR1 = 
-SRC_DIR2 = 
-SRC_DIR3 = 
+SRC_DIRS = .
 
-# ok for c/c++
-SRC = $(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
-SRC+=$(wildcard $(SRC_DIR1)/*.c $(SRC_DIR1)/*.cpp)
-SRC+=$(wildcard $(SRC_DIR2)/*.c $(SRC_DIR2)/*.cpp)
-SRC+=$(wildcard $(SRC_DIR3)/*.c $(SRC_DIR3)/*.cpp)
+SRCS := $(shell find $(SRC_DIRS) -maxdepth 1 -name '*.cpp' -or -name '*.c')
 
-# ok for c/c++
-OBJ = $(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(SRC))) 
+OBJS = $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SRCS))) 
 
 
 # !!!===
@@ -120,7 +110,7 @@ endif
 
 all: $(target)
 
-$(target): $(OBJ)
+$(target): $(OBJS)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
@@ -144,7 +134,7 @@ endif
 
 clean:
 	@$(NQ) "Cleaning..."
-	$(Q)$(RM) $(target) $(OBJ)
+	$(Q)$(RM) $(target) $(OBJS)
 
 # use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f

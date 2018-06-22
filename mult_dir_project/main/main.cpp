@@ -5,6 +5,7 @@
 #include <foo.h>
 #include <bar.h>
 #include <crc.h>
+#include "hello.h"
 
 static void nogood(void)
 {
@@ -13,7 +14,7 @@ static void nogood(void)
 
 int main(void)
 {
-    printf("hello from %s().\n", __func__);
+    printf("hello from %s() %d.\n", __func__, HELLO);
     hello_foo();
     hello_bar();
     //print_trace(33);
