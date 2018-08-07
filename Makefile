@@ -30,17 +30,12 @@ CXX = $(CROSS_COMPILE)g++
 AR  = $(CROSS_COMPILE)ar
 
 # !!!===
-# in case all .c/.cpp need g++...
+# in case all .c/.cpp need g++, specify CC=CXX...
 # CC = $(CXX)
 
 ARFLAGS = -cr
 RM     = -rm -rf
 MAKE   = make
-
-CFLAGS  = 
-LDFLAGS = 
-DEFS    =
-LIBS    =
 
 # !!!===
 # target executable file or .a or .so
@@ -70,12 +65,14 @@ endif
 # Macros define here
 DEFS    += -DJIMKENT
 
+# !!! compile flags define here...
 CFLAGS  += $(DEFS)
+# !!! c++ flags
 CXXFLAGS = $(CFLAGS)
-
+# !!! library here...
 LIBS    += 
-
-LDFLAGS += $(LIBS)
+# !!! gcc/g++ link flags here
+LDFLAGS += $(LIBS)-lpthread -lrt
 
 # !!!===
 # include head file directory here
@@ -92,27 +89,27 @@ BUILD_DIR ?= #./build/
 # just need the directory.
 SRC_DIRS = . 
 # or try this
-#SRC_DIRS = ./ 
-#SRC_DIRS += ../outbox
+#SRC_DIRS = . ../outbox
 
 # !!!===
 # gcc/g++ compile flags
 CFLAGS += $(INCDIRS)
 CXXFLAGS += -std=c++11
 
-# !!!===
-# gcc/g++ link flags
-LDFLAGS += -lpthread -lrt
-
+# dynamic library build flags
 DYNC_FLAGS += -fpic -shared
 
+# include directory(s)
 INCDIRS := $(addprefix -I, $(INC))
 
+# source file(s)
 SRCS := $(shell find $(SRC_DIRS) -maxdepth 1 -name '*.cpp' -or -name '*.c')
+# or try this
 #SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c')
 
 OBJS = $(patsubst %.c,$(BUILD_DIR)%.o, $(patsubst %.cpp,$(BUILD_DIR)%.o, $(SRCS))) 
 
+# depend files(.d)
 DEPS := $(OBJS:.o=.d)
 
 ifeq ($(V),1)
@@ -143,12 +140,12 @@ endif
 # make all .c or .cpp
 $(BUILD_DIR)%.o: %.c
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@))
+	@$(NQ) "Compiling: " $(basename $(notdir $@)).c
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)%.o: %.cpp
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@))
+	@$(NQ) "Compiling: " $(basename $(notdir $@)).cpp
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:

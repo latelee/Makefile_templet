@@ -1,6 +1,12 @@
 Makefile_templet -- Makefile templet for Linux
 =======================
 
+[![Build Status](https://travis-ci.org/latelee/Makefile_templet.svg?branch=master)](https://travis-ci.org/latelee/Makefile_templet)
+[![GitHub stars](https://img.shields.io/github/stars/latelee/Makefile_templet.svg)](https://github.com/latelee/Makefile_templet)[![GitHub forks](https://img.shields.io/github/forks/latelee/Makefile_templet.svg)](https://github.com/latelee/Makefile_templet)
+
+Stargazers over time  
+[![Stargazers over time](https://starcharts.herokuapp.com/latelee/Makefile_templet.svg)](https://starcharts.herokuapp.com/latelee/Makefile_templet)
+
 PROJECT
 =======================
 files for Makefile

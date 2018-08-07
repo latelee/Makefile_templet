@@ -1,0 +1,16 @@
+git:
+  quiet: true
+
+language: c
+
+install:
+  echo "install sth here"
+before_script:
+  echo "before script"
+script:
+  - make -C one_dir_project/
+  - make -C mult_dir_project_new1/
+
+after_script:
+  echo "after script"
+

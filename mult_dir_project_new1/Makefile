@@ -121,7 +121,7 @@ DYNC_FLAGS += -fpic -shared
 
 INCDIRS := $(addprefix -I, $(INC))
 
-SRCS := $(shell find $(SRC_DIRS) -maxdepth 1 -name '*.cpp' -or -name '*.c')
+SRCS := $(shell find $(SRC_DIRS) -maxdepth 1 -name '*.cpp' -or -name '*.c' | grep -v main.cpp)
 #SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c')
 
 OBJS = $(patsubst %.c,$(BUILD_DIR)%.o, $(patsubst %.cpp,$(BUILD_DIR)%.o, $(SRCS))) 
@@ -138,34 +138,42 @@ endif
 
 ###############################################################################
 
+# internal lib name, just ignore it
+libtarget=libfoobar.a
+
 all: $(VER_FILE) $(BUILD_DIR)$(target)
 
 $(VER_FILE): 
 	@echo "building version..."
 	@chmod +x $(VER_SCRIPT); sh $(VER_SCRIPT) $(VER_FILE) $(VER_MAJOR) $(VER_MINOR) $(R)
 
-$(BUILD_DIR)$(target): $(OBJS)
-
-ifeq ($(suffix $(target)), .so)
-	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
-else ifeq ($(suffix $(target)), .a)
-	@$(NQ) "Generating static lib file..." $(notdir $(target))
-	$(Q)$(AR) $(ARFLAGS) -o $(target) $^
-else
+# generate target, we need main.o here
+$(BUILD_DIR)$(target): $(BUILD_DIR)$(libtarget) main.o
 	@$(NQ) "Generating executable file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS)
+	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(BUILD_DIR)$(libtarget) $(LDFLAGS)
+	@rm -rf $(BUILD_DIR)$(libtarget)
+
+$(BUILD_DIR)$(libtarget): $(OBJS)
+ifeq ($(suffix $(libtarget)), .so)
+	@$(NQ) "Generating dynamic lib file..." $(notdir $(libtarget))
+	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(libtarget) $(LDFLAGS) $(DYNC_FLAGS)
+else ifeq ($(suffix $(libtarget)), .a)
+	@$(NQ) "Generating static lib file..." $(notdir $(libtarget))
+	$(Q)$(AR) $(ARFLAGS) -o $(libtarget) $^
+else
+	@$(NQ) "Generating executable file..." $(notdir $(libtarget))
+	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(libtarget) $(LDFLAGS)
 endif
 
 # make all .c or .cpp
 $(BUILD_DIR)%.o: %.c
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@))
+	@$(NQ) "Compiling: " $(basename $(notdir $@)).c
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)%.o: %.cpp
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@))
+	@$(NQ) "Compiling: " $(basename $(notdir $@)).cpp
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
