@@ -26,7 +26,6 @@ USAGE
 * For debug version, type: make debug=y
 * For release version, type: make debug=n
 * For cross compile, type：make CROSS_COMPILE=arm-linux-
-* For multi directory, type：make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
 
 NOTES
 =======================
@@ -42,8 +41,8 @@ Late Lee (li@latelee.org) <br>
 
 [CST studio](http://www.latelee.org) welcome donate!
 
-last update: <br>
-2018.1.27 <br>
+last release: <br>
+2018.8.30 <br>
 
 
 Makefile_templet -- Linux环境的Makefile模板
@@ -68,7 +67,6 @@ Makefile_templet -- Linux环境的Makefile模板
 * 调试版本：make debug=y
 * 非调试版本：make debug=n
 * 交叉编译版本：make CROSS_COMPILE=arm-linux-
-* 多目录版本：make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
 
 注意事项
 =======================
@@ -85,5 +83,5 @@ Makefile_templet -- Linux环境的Makefile模板
 
 [迟思堂工作室](http://www.latelee.org) 欢迎赞助作者！
 
-last update: <br>
-2018.1.27 <br>
+最新发布日期: <br>
+2018.8.30 <br>

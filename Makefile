@@ -72,13 +72,11 @@ CXXFLAGS = $(CFLAGS)
 # !!! library here...
 LIBS    += 
 # !!! gcc/g++ link flags here
-LDFLAGS += $(LIBS)-lpthread -lrt
+LDFLAGS += $(LIBS) -lpthread -lrt
 
 # !!!===
 # include head file directory here
 INC = ./ ./inc
-# or try this
-#INC := $(shell find $(INC) -type d)
 
 # !!!===
 # build directory

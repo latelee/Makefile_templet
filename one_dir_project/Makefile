@@ -72,7 +72,7 @@ CXXFLAGS = $(CFLAGS)
 # !!! library here...
 LIBS    += 
 # !!! gcc/g++ link flags here
-LDFLAGS += $(LIBS)-lpthread -lrt
+LDFLAGS += $(LIBS) -lpthread -lrt
 
 # !!!===
 # include head file directory here
