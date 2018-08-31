@@ -17,7 +17,7 @@ ARFLAGS = cr
 RM = -rm -rf
 MAKE = make
 
-CFLAGS = -Wall -Wfatal-errors -MM
+CFLAGS = -Wall -Wfatal-errors
 DEBUG = y
 
 ifeq ($(DEBUG), y)
@@ -76,8 +76,8 @@ export RM
 # make all .c or .cpp
 $(obj)%.o:	%.c
 	@echo "Compling: " $(addsuffix .c, $(basename $(notdir $@)))
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(obj)%.o:	%.cpp
 	@echo "Compling: " $(addsuffix .cpp, $(basename $(notdir $@)))
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) -c $< -o $@

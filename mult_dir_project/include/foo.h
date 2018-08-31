@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-void foo(int i)
+void foo(int i);
 int hello_foo(void);
 
 #ifdef __cplusplus

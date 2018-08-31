@@ -13,9 +13,9 @@ $(obj).depend: $(TOPDIR)/config.mk $(SRC_C) $(SRC_CPP)
 	@rm -f $@
 	@for f in $(SRC_C); do \
 		g=`basename $$f | sed -e 's/\(.*\)\.\w/\1.o/'`; \
-		$(CC) $(CFLAGS) -E -MQ $(_obj)$$g $$f >> $@ ; \
+		$(CC)  -MM $(CFLAGS) -E -MQ $(_obj)$$g $$f >> $@ ; \
 	done
 	@for f in $(SRC_CPP); do \
 		g=`basename $$f | sed -e 's/\(.*\)\...\w/\1.o/'`; \
-		$(CC) $(CFLAGS) -E -MQ $(_obj)$$g $$f >> $@ ; \
+		$(CC)  -MM $(CFLAGS) -E -MQ $(_obj)$$g $$f >> $@ ; \
 	done

@@ -68,15 +68,15 @@ $(target): $(LIBS) exe
 # make all .c or .cpp
 $(obj)$(MAIN_DIR)%.o:	%.c
 	@echo "Compling: " $(addsuffix .c, $(basename $(notdir $@)))
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(obj)$(MAIN_DIR)%.o:	%.cpp
 	@echo "Compling: " $(addsuffix .cpp, $(basename $(notdir $@)))
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) -c $< -o $@
 
 exe: $(OBJ_CPP) $(OBJ_C)
 	@echo "Generating executable file..." $(notdir $(target))
-	@$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS)
+	$(CXX) $(CFLAGS) $^ -o $(target) $(LDFLAGS)
 
 $(LIBS):
 	$(MAKE) -C $(dir $(subst $(obj),,$@))
