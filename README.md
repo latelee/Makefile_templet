@@ -15,6 +15,7 @@ files for Makefile
 * mult_dir_project：Makefile for multi directory(ref u-boot)
 * mult_dir_project_new：a new version for multi directory(not u-boot)
 * linux_driver：Makefile for linux driver demo
+* stm32_project: Makefile for stm32(using arm-none-eabi-gcc)
 
 USAGE
 =======================
@@ -42,7 +43,7 @@ Late Lee (li@latelee.org) <br>
 [CST studio](http://www.latelee.org) welcome donate!
 
 last release: <br>
-2018.8.30 <br>
+2018.12.11 <br>
 
 
 Makefile_templet -- Linux环境的Makefile模板
@@ -56,6 +57,7 @@ Makefile_templet -- Linux环境的Makefile模板
 * mult_dir_project：多目录工程示例(参考uboot的)
 * mult_dir_project_new：由单目录工程的Makefile改造而成，区别于uboot版本
 * linux_driver：linux驱动的Makefile模板及其测试示例。
+* stm32_project: STM32的Makefile(使用arm-none-eabi-gcc)
 
 用法
 =======================
@@ -84,4 +86,4 @@ Makefile_templet -- Linux环境的Makefile模板
 [迟思堂工作室](http://www.latelee.org) 欢迎赞助作者！
 
 最新发布日期: <br>
-2018.8.30 <br>
+2018.12.11 <br>
