@@ -1,6 +1,6 @@
 #################################################################
-# (C) Copyleft 2010 2011 2013 2015 2016 2017
-# by Late Lee<(latelee@latelee.com)> at www.latelee.org
+# (C) Copyleft 2010 2011 2013 2015 2016 2017 2018
+# by Late Lee<li@latelee.org> from www.latelee.org
 # 
 # A simple Makefile for linux driver
 #
@@ -12,19 +12,12 @@
 #        $ make debug=y # debug
 #################################################################
 
-### nothing
-OFFSET=\x1b[21G   # 21 col
-COLOR1=\x1b[0;32m # green
-COLOR2=\x1b[1;35m # 
-COLOR3=\x1b[1;31m # red
-RESET=\x1b[0m
+CLEAN_BEGIN=@echo "Cleaning up ..."
+CLEAN_END=@echo "[Done.]"
 
-CLEAN_BEGIN=@echo -e "$(OFFSET)$(COLOR2)Cleaning up ...$(RESET)"
-CLEAN_END=@echo -e "$(OFFSET)$(COLOR2)[Done.]$(RESET)"
-
-MAKE_BEGIN=@echo -ne "$(OFFSET)$(COLOR1)Compiling ...$(RESET)"
-MAKE_DONE="$(OFFSET)$(COLOR1)[Job done!]$(RESET)";
-MAKE_ERR="$(OFFSET)$(COLOR3)[Oops!Error occurred]$(RESET)";
+MAKE_BEGIN=@echo "Compiling ..."
+MAKE_DONE="                    [Job done!]";
+MAKE_ERR="                    [Oops!Error occurred]";
 ### nothing end
 
 # !!!=== for cross compile
@@ -71,7 +64,7 @@ ifneq ($(KERNELRELEASE), )
 else
     # !!!=== change to your linux kernel path
 	#KERNELDIR ?= /lib/modules/$(shell uname -r)/build
-	KERNELDIR ?= /home/latelee/outwork/kernel
+	KERNELDIR ?= /home/latelee/linux_ebook/linux
 	PWD := $(shell pwd)
 
     
@@ -80,9 +73,9 @@ all:
 	@echo 
 	@if \
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules;\
-	then echo -e $(MAKE_DONE)\
+	then echo $(MAKE_DONE)\
 	else \
-	echo -e  $(MAKE_ERR)\
+	echo  $(MAKE_ERR)\
 	exit 1; \
 	fi
 endif
@@ -94,15 +87,15 @@ clean:
 	$(CLEAN_END)
 
 install:
-	@echo -e "$(COLOR3)                   Note:"
-	@echo -e "To install or not install,that is a question.$(RESET)"
+	@echo "                   Note:"
+	@echo "To install or not install,that is a question."
 
 modules:
-	@echo -e "$(COLOR3)Do not need to do this.$(RESET)"
+	@echo "Do not need to do this."
 
 modules_install:
-	@echo -e "$(COLOR3)Do not need to do this.$(RESET)"
+	@echo "Do not need to do this."
 love:
-	@echo -e "$(COLOR3)To make or not to make, that is also a question.$(RESET)"
+	@echo "To make or not to make, that is also a question."
 
 .PHONY:all clean install love modules modules_install
