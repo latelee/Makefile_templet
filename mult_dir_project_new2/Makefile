@@ -1,4 +1,4 @@
-# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017 2018
+# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020
 # Late Lee(li@latelee.org) from http://www.latelee.org
 # 
 # A simple Makefile for *ONE* project(c or/and cpp file) in *ONE* or *MORE* directory
@@ -12,7 +12,6 @@
 #        $ make V=1     # verbose ouput
 #        $ make CROSS_COMPILE=arm-arago-linux-gnueabi-  # cross compile for ARM, etc.
 #        $ make debug=y # debug
-#        $ make SRC_DIR1=foo SRC_DIR2=bar SRC_DIR3=crc
 #
 # log
 #       2013-05-14 sth about debug...
@@ -24,18 +23,19 @@
 # !!!=== cross compile...
 CROSS_COMPILE ?= 
 
+MKDIR_P ?= mkdir -p
+
 CC  = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
 AR  = $(CROSS_COMPILE)ar
 
+# !!!===
+# in case all .c/.cpp need g++, specify CC=CXX...
+# CC = $(CXX)
+
 ARFLAGS = -cr
 RM     = -rm -rf
 MAKE   = make
-
-CFLAGS  = 
-LDFLAGS = 
-DEFS    =
-LIBS    =
 
 # !!!===
 # target executable file or .a or .so
@@ -43,7 +43,7 @@ target = a.out
 
 # !!!===
 # compile flags
-CFLAGS += -Wall -Wfatal-errors 
+CFLAGS += -Wall -Wfatal-errors -MMD
 
 # !!!=== pkg-config here
 #CFLAGS += $(shell pkg-config --cflags --libs glib-2.0 gattlib)
@@ -62,40 +62,55 @@ else
 endif
 
 # !!!===
+# Macros define here
 DEFS    += -DJIMKENT
 
+# !!! compile flags define here...
 CFLAGS  += $(DEFS)
-CXXFLAGS = $(CFLAGS) -std=c++11
-
+# !!! c++ flags
+CXXFLAGS = $(CFLAGS)
+# !!! library here...
 LIBS    += 
-
-LDFLAGS += $(LIBS)
-
-# !!!===
-INC = ./ 
-INCS = $(shell find $(SRC_DIRS) -type d)
-INCDIRS := $(addprefix -I, $(INCS))
+# !!! gcc/g++ link flags here
+LDFLAGS += $(LIBS) -lpthread -lrt
 
 # !!!===
+# include head file directory here
+INC = ./ ./inc
+# or try this
+INC += $(shell find $(SRCS) -type d)
+
+# !!!===
+# build directory
+BUILD_DIR ?= #./build/
+
+# !!!===
+# source file(s), including ALL c file(s) or cpp file(s)
+# just need the directory.
+SRC_DIRS = . 
+# or try this
+#SRC_DIRS = . ../outbox
+
+# !!!===
+# gcc/g++ compile flags
 CFLAGS += $(INCDIRS)
-CXXFLAGS += 
+CXXFLAGS += -std=c++11
 
-# !!!===
-LDFLAGS += -lpthread -lrt
-
+# dynamic library build flags
 DYNC_FLAGS += -fpic -shared
 
-# !!!===
-# source file(s), including c file(s) or cpp file(s)
-SRC_DIRS = ./
+# include directory(s)
+INCDIRS := $(addprefix -I, $(INC))
 
+# source file(s)
 SRCS := $(shell find $(SRC_DIRS) -maxdepth 2 -name '*.cpp' -or -name '*.c')
+# or try this
+#SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c')
 
-OBJS = $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SRCS))) 
+OBJS = $(patsubst %.c,$(BUILD_DIR)%.o, $(patsubst %.cpp,$(BUILD_DIR)%.o, $(SRCS))) 
 
-# !!!===
-# in case all .c/.cpp need g++...
-# CC = $(CXX)
+# depend files(.d)
+DEPS := $(OBJS:.o=.d)
 
 ifeq ($(V),1)
 Q=
@@ -107,35 +122,42 @@ endif
 
 ###############################################################################
 
-all: $(target)
+all: $(BUILD_DIR)$(target)
 
-$(target): $(OBJS)
+$(BUILD_DIR)$(target): $(OBJS)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
+	$(Q)$(CXX) $^ $(LDFLAGS) $(DYNC_FLAGS) -o $(target)
 else ifeq ($(suffix $(target)), .a)
 	@$(NQ) "Generating static lib file..." $(notdir $(target))
 	$(Q)$(AR) $(ARFLAGS) -o $(target) $^
 else
 	@$(NQ) "Generating executable file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS)
+	$(Q)$(CXX) $^ $(LDFLAGS) -o $(target)
 endif
 
 # make all .c or .cpp
-%.o: %.c
+$(BUILD_DIR)%.o: %.c
+	@$(MKDIR_P) $(dir $@)
 	@$(NQ) "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
-%.o: %.cpp
+$(BUILD_DIR)%.o: %.cpp
+	@$(MKDIR_P) $(dir $@)
 	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	@$(NQ) "Cleaning..."
-	$(Q)$(RM) $(target) $(OBJS)
-
+	$(Q)$(RM) $(OBJS) $(target) $(DEPS)
+# delete build directory if needed
+ifneq ($(BUILD_DIR),)
+	$(Q)$(RM) $(BUILD_DIR)
+endif
 # use 'grep -v soapC.o' to skip the file
 	@find . -iname '*.o' -o -iname '*.bak' -o -iname '*.d' | xargs rm -f
 
 .PHONY: all clean
+
+-include $(DEPS)

@@ -1,4 +1,4 @@
-# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017 2018
+# (C) Copyleft 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020
 # Late Lee(li@latelee.org) from http://www.latelee.org
 # 
 # A simple Makefile for *ONE* project(c or/and cpp file) in *ONE* or *MORE* directory
@@ -128,24 +128,24 @@ $(BUILD_DIR)$(target): $(OBJS)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
+	$(Q)$(CXX) $^ $(LDFLAGS) $(DYNC_FLAGS) -o $(target)
 else ifeq ($(suffix $(target)), .a)
 	@$(NQ) "Generating static lib file..." $(notdir $(target))
 	$(Q)$(AR) $(ARFLAGS) -o $(target) $^
 else
 	@$(NQ) "Generating executable file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS)
+	$(Q)$(CXX) $^ $(LDFLAGS) -o $(target)
 endif
 
 # make all .c or .cpp
 $(BUILD_DIR)%.o: %.c
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@)).c
+	@$(NQ) "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)%.o: %.cpp
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@)).cpp
+	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:

@@ -114,13 +114,13 @@ $(target): $(OBJS)
 
 ifeq ($(suffix $(target)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS) $(DYNC_FLAGS)
+	$(Q)$(CXX) $^ $(LDFLAGS) $(DYNC_FLAGS) -o $(target)
 else ifeq ($(suffix $(target)), .a)
 	@$(NQ) "Generating static lib file..." $(notdir $(target))
 	$(Q)$(AR) $(ARFLAGS) -o $(target) $^
 else
 	@$(NQ) "Generating executable file..." $(notdir $(target))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(target) $(LDFLAGS)
+	$(Q)$(CXX) $^ $(LDFLAGS) -o $(target)
 endif
 
 # make all .c or .cpp

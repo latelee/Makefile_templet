@@ -156,24 +156,24 @@ $(BUILD_DIR)$(target): $(BUILD_DIR)$(libtarget) main.o
 $(BUILD_DIR)$(libtarget): $(OBJS)
 ifeq ($(suffix $(libtarget)), .so)
 	@$(NQ) "Generating dynamic lib file..." $(notdir $(libtarget))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(libtarget) $(LDFLAGS) $(DYNC_FLAGS)
+	$(Q)$(CXX) $^ $(LDFLAGS) $(DYNC_FLAGS) -o $(libtarget)
 else ifeq ($(suffix $(libtarget)), .a)
 	@$(NQ) "Generating static lib file..." $(notdir $(libtarget))
 	$(Q)$(AR) $(ARFLAGS) -o $(libtarget) $^
 else
 	@$(NQ) "Generating executable file..." $(notdir $(libtarget))
-	$(Q)$(CXX) $(CXXFLAGS) $^ -o $(libtarget) $(LDFLAGS)
+	$(Q)$(CXX) $(LDFLAGS) $^ -o $(libtarget)
 endif
 
 # make all .c or .cpp
 $(BUILD_DIR)%.o: %.c
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@)).c
+	@$(NQ) "Compiling: " $(addsuffix .c, $(basename $(notdir $@)))
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)%.o: %.cpp
 	@$(MKDIR_P) $(dir $@)
-	@$(NQ) "Compiling: " $(basename $(notdir $@)).cpp
+	@$(NQ) "Compiling: " $(addsuffix .cpp, $(basename $(notdir $@)))
 	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:

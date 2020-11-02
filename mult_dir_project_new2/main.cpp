@@ -3,8 +3,19 @@
 #include <foo.h>
 #include <bar.h>
 #include <crc.h>
+
 #include "hello.h"
 #include "debug.h"
+
+#include <string>
+static void c11_test()
+{
+    std::string foo = "good";
+    for (auto it = foo.begin(); it < foo.end(); it++)
+    {
+        printf("%s\n", *it);
+    }
+}
 
 static void nogood(void)
 {

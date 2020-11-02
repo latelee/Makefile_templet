@@ -12,7 +12,7 @@ PROJECT
 files for Makefile
 * Makefile：the default Makefile, for all files in ONE directory(c or c++), auto detect the target(.so or .a or binary file)
 * one_dir_project：Makefile demo
-* mult_dir_project：Makefile for multi directory(ref u-boot)
+* mult_dir_project：Makefile for multi directory(ref u-boot, out of date)
 * mult_dir_project_new：a new version for multi directory(not u-boot)
 * linux_driver：Makefile for linux driver demo
 * stm32_project: Makefile for stm32(using arm-none-eabi-gcc)
@@ -54,8 +54,10 @@ Makefile_templet -- Linux环境的Makefile模板
 本仓库介绍Makefile示例。
 * Makefile：默认的Makefile，针对目录下所有文件(c/c++)，根据目标文件决定是库文件还是可执行文件。
 * one_dir_project：单目录工程示例
-* mult_dir_project：多目录工程示例(参考uboot的)
-* mult_dir_project_new：由单目录工程的Makefile改造而成，区别于uboot版本
+* mult_dir_project：多目录工程示例(参考uboot的，暂不更新)
+* mult_dir_project_new：由单目录工程的Makefile改造而成，区别于uboot版本，其中hello子目录为库形式。  
+* mult_dir_project_new1：与上类似，无中间库形式，自动产生版本号头文件
+* mult_dir_project_new2：与上上类似，无中间库，搜索所有子目录，自动搜索源码，深度为2。  
 * linux_driver：linux驱动的Makefile模板及其测试示例。
 * stm32_project: STM32的Makefile(使用arm-none-eabi-gcc)
 
@@ -86,4 +88,4 @@ Makefile_templet -- Linux环境的Makefile模板
 [迟思堂工作室](http://www.latelee.org) 欢迎赞助作者！
 
 最新发布日期: <br>
-2018.12.11 <br>
+2020.11.01 <br>
